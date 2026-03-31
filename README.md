@@ -17,5 +17,5 @@ Cilt ve ben takibi için dijital arşiv. **Yapay zeka (Google Gemini)** yalnızc
 2. **Yayın:** Netlify’da `GEMINI_API_KEY` ortam değişkeni tanımlayın; uygulamada “Netlify proxy kullan”ı işaretleyin.
 3. **Yerel deneme:** Üst menüden anahtarı girin (yalnızca `sessionStorage`). CORS hatası alırsanız proxy veya `netlify dev` kullanın.
 
-4. 
+   
 https://www.loom.com/share/db10475da98349699b6f9bceb3d7bd86
