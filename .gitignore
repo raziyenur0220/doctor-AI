@@ -1,0 +1,9 @@
+# API anahtarı asla repoya girmesin
+.env
+.env.*
+!.env.example
+js/config.secrets.js
+
+# OS
+Thumbs.db
+.DS_Store
