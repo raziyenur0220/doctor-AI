@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="DermScan AI — cilt ve ben takibi; yapay zeka isteğe bağlı asistan modunda."
+    />
+    <title>DermScan AI — Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">İçeriğe geç</a>
+
+    <header class="app-header" role="banner">
+      <div class="app-header__inner">
+        <div class="brand">
+          <div class="brand__mark" aria-hidden="true">DS</div>
+          <div class="brand__text">
+            <h1>DermScan AI</h1>
+            <p>Cilt arşivi ve takip paneli</p>
+          </div>
+        </div>
+        <div class="app-header__actions">
+          <button
+            type="button"
+            class="btn btn--ghost btn--compact"
+            id="btn-api-settings"
+          >
+            API anahtarı
+          </button>
+          <div
+            class="role-badge"
+            title="Yapay zeka yalnızca siz istediğinizde devreye girer; karar ve takip sizdedir."
+          >
+            <span>Asistan modu</span>
+            <span aria-hidden="true">~%25</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="intro" aria-labelledby="intro-heading">
+        <h2 id="intro-heading">Hoş geldiniz</h2>
+        <p>
+          Kayıtlı benlerinizi tarih ve vücut bölgesine göre arşivleyin. İleride
+          <strong>Google Gemini</strong> ile isteğe bağlı teknik asistan analizi
+          alabilirsiniz (galeriden kayda tıklayın). Bu özellik tıbbi teşhis yerine
+          geçmez; yalnızca bilgilendirme amaçlıdır.
+        </p>
+      </section>
+
+      <section
+        class="dashboard"
+        aria-labelledby="dashboard-heading"
+      >
+        <div class="dashboard__head">
+          <div>
+            <h3 id="dashboard-heading">Kayıtlı benlerim</h3>
+            <p class="hint">
+              Fotoğraf yükleyin, tarih ve vücut bölgesini seçip arşive kaydedin. Veriler
+              bu cihazda saklanır (LocalStorage).
+            </p>
+          </div>
+          <button type="button" class="btn btn--primary" id="btn-new-entry">
+            <span class="btn__icon" aria-hidden="true">+</span>
+            Yeni ekle
+          </button>
+        </div>
+
+        <div
+          class="upload-card"
+          id="upload-section"
+          aria-labelledby="upload-heading"
+        >
+          <h4 class="upload-card__title" id="upload-heading">Fotoğraf yükle</h4>
+          <p class="upload-card__lead">
+            PNG veya JPEG yükleyin. Sürükleyip bırakabilir veya dosya seçebilirsiniz.
+          </p>
+
+          <div
+            class="dropzone"
+            id="dropzone"
+            tabindex="0"
+            aria-label="Fotoğraf yükle: dosya seçin veya sürükleyip bırakın"
+            aria-describedby="upload-heading"
+          >
+            <input
+              type="file"
+              id="photo-input"
+              class="sr-only"
+              accept="image/*"
+              aria-label="Fotoğraf dosyası seç"
+            />
+            <div class="dropzone__inner">
+              <span class="dropzone__icon" aria-hidden="true">⬆</span>
+              <p class="dropzone__text">
+                <strong>Dosyayı buraya bırakın</strong> veya
+                <button type="button" class="dropzone__browse" id="btn-browse">
+                  bilgisayardan seçin
+                </button>
+              </p>
+              <p class="dropzone__hint">En iyi sonuç için iyi aydınlatılmış, net fotoğraf.</p>
+            </div>
+          </div>
+
+          <p class="upload-error" id="upload-error" role="alert" hidden></p>
+
+          <div class="preview-panel" id="preview-panel" hidden>
+            <p class="preview-panel__label">Önizleme</p>
+            <div class="preview-panel__frame">
+              <img
+                id="preview-image"
+                class="preview-panel__img"
+                alt="Seçilen fotoğrafın önizlemesi"
+              />
+            </div>
+            <div class="save-form" id="save-form">
+              <div class="save-form__row">
+                <div class="field">
+                  <label class="field__label" for="entry-date">Tarih</label>
+                  <input
+                    type="date"
+                    id="entry-date"
+                    class="field__input"
+                    style="width: 100%; min-height: 48px; cursor: pointer;"
+                    required
+                  />
+                </div>
+                <div class="field field--grow">
+                  <label class="field__label" for="entry-region">Vücut bölgesi</label>
+                  <select id="entry-region" class="field__input" style="min-height: 48px; cursor: pointer;" required>
+                    <option value="">Seçin…</option>
+                    <option value="arms">Kollar</option>
+                    <option value="legs">Bacaklar</option>
+                    <option value="back">Sırt</option>
+                    <option value="chest">Göğüs</option>
+                    <option value="abdomen">Karın</option>
+                    <option value="neck">Boyun</option>
+                    <option value="face">Yüz</option>
+                    <option value="hands">Eller</option>
+                    <option value="feet">Ayaklar</option>
+                    <option value="other">Diğer</option>
+                  </select>
+                </div>
+              </div>
+              <div class="save-form__actions">
+                <button type="button" class="btn btn--primary" id="btn-save-entry">
+                  Arşive kaydet
+                </button>
+              </div>
+            </div>
+
+            <div class="preview-panel__actions">
+              <button type="button" class="btn btn--ghost" id="btn-change-photo">
+                Farklı fotoğraf
+              </button>
+              <button type="button" class="btn btn--ghost btn--danger-ghost" id="btn-clear-photo">
+                Temizle
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-block">
+          <h4 class="gallery-block__title" id="gallery-heading">Arşivim</h4>
+          <p class="gallery-block__hint" id="gallery-count" aria-live="polite"></p>
+
+          <div class="empty-state" id="empty-state" role="status">
+            <div class="empty-state__icon" aria-hidden="true">📷</div>
+            <p>Henüz kayıtlı ben yok.</p>
+            <p>
+              Fotoğraf yükleyip tarih ve bölge seçerek kaydedin; liste burada
+              görünecek. Yapay zeka yalnızca siz analiz istediğinizde devreye girer.
+            </p>
+          </div>
+
+          <ul
+            class="gallery"
+            id="mole-list"
+            hidden
+            aria-labelledby="gallery-heading"
+          ></ul>
+        </div>
+      </section>
+    </main>
+
+    <div
+      id="entry-modal"
+      class="modal"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="entry-modal-title"
+    >
+      <div class="modal__backdrop" data-close-modal tabindex="-1"></div>
+      <div class="modal__panel">
+        <div class="modal__head">
+          <h2 class="modal__title" id="entry-modal-title">Kayıt</h2>
+          <button
+            type="button"
+            class="modal__close"
+            data-close-modal
+            aria-label="Kapat"
+          >
+            ×
+          </button>
+        </div>
+        <div class="modal__body">
+          <div class="entry-modal__preview">
+            <img
+              id="entry-modal-image"
+              class="entry-modal__img"
+              alt=""
+            />
+          </div>
+          <p class="entry-modal__meta" id="entry-modal-meta"></p>
+          
+          <div class="compare-block" id="compare-block" style="margin-top: 1rem;">
+            <label class="field" for="compare-select">
+              <span class="field__label">Zaman Yolculuğu (Eski Kayıtla Karşılaştır)</span>
+              <select id="compare-select" class="field__input">
+                <option value="">Karşılaştırma Yapma</option>
+              </select>
+            </label>
+            <p id="compare-error" class="hint" style="color: #e74c3c; margin-top: 0.35rem; font-size: 0.8rem;" hidden>Zaman Yolculuğu için en az 2 kayıt gereklidir.</p>
+          </div>
+
+          <div class="entry-modal__actions">
+            <button
+              type="button"
+              class="btn btn--primary"
+              id="btn-assistant-analyze"
+            >
+              Asistana analiz ettir
+            </button>
+          </div>
+          <p class="entry-modal__status" id="analysis-status" hidden></p>
+          <div
+            class="entry-modal__result"
+            id="analysis-result"
+            hidden
+          ></div>
+
+          <div id="report-form" class="report-form" style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);" hidden>
+            <label class="field" for="report-name">
+              <span class="field__label">İsim-Soyisim / Kişisel Not (Opsiyonel)</span>
+              <input type="text" id="report-name" class="field__input" placeholder="Anonim veya Doktorunuza Notunuz" autocomplete="off" />
+            </label>
+            <div class="entry-modal__actions" style="margin-top: 0.75rem;">
+              <button type="button" class="btn btn--ghost" id="btn-print-report" style="width: 100%; justify-content: center;">
+                📄 PDF Olarak İndir / Yazdır
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="api-modal"
+      class="modal"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="api-modal-title"
+    >
+      <div class="modal__backdrop" data-close-modal tabindex="-1"></div>
+      <div class="modal__panel modal__panel--narrow">
+        <div class="modal__head">
+          <h2 class="modal__title" id="api-modal-title">Gemini API</h2>
+          <button
+            type="button"
+            class="modal__close"
+            data-close-modal
+            aria-label="Kapat"
+          >
+            ×
+          </button>
+        </div>
+        <div class="modal__body">
+          <p class="api-modal__lead">
+            Anahtarı asla paylaşmayın ve repoya eklemeyin. Ayrıntılar:
+            <a href="docs/API-ANAHTARI.md" target="_blank" rel="noopener"
+              >docs/API-ANAHTARI.md</a
+            >
+          </p>
+          <label class="field" for="api-key-input">
+            <span class="field__label">API anahtarı (yalnızca bu tarayıcı oturumu)</span>
+            <input
+              type="password"
+              id="api-key-input"
+              class="field__input"
+              autocomplete="off"
+              placeholder="AI Studio’dan yapıştırın"
+            />
+          </label>
+          <p class="api-modal__lead">
+            Model: <code>gemini-1.5-flash</code> (sabit URL, kod içinde, API v1beta; proxy yok).
+          </p>
+          <div class="api-modal__buttons">
+            <button type="button" class="btn btn--primary" id="btn-save-api-settings">
+              Kaydet
+            </button>
+            <button type="button" class="btn btn--ghost" id="btn-clear-api-key">
+              Oturum anahtarını sil
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="app-footer" role="contentinfo">
+      <div class="app-footer__inner">
+        <p>
+          <strong>Önemli:</strong> Bu uygulama tıbbi tavsiye veya teşhis sunmaz.
+          Şüphe veya değişiklik durumunda mutlaka bir sağlık profesyoneline
+          danışın.
+        </p>
+      </div>
+    </footer>
+
+    <script src="js/app.js" defer></script>
+  </body>
+</html>
